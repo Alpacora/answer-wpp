@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "nodenext",
+    "lib": ["ES2023"],
+    "moduleResolution": "nodenext",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "types": []
+  }
+}

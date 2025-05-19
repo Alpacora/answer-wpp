@@ -1,0 +1,39 @@
+{
+  "week": [
+    {
+      "day": "Monday",
+      "proteins": ["Maminha ao forno", "Galinha assada"],
+      "sides": ["Arroz", "Feijão preto", "Legumes", "Salada de folhas"]
+    },
+    {
+      "day": "Tuesday",
+      "proteins": ["Strogonoff de frango", "Carne de sol"],
+      "sides": ["Arroz", "Feijão macassar", "Salada de folhas", "Purê"]
+    },
+    {
+      "day": "Wednesday",
+      "proteins": ["Cozido de boi", "Galinha guisada"],
+      "sides": ["Arroz", "Feijão mulatinho", "Legumes", "Salada de folhas"]
+    },
+    {
+      "day": "Thursday",
+      "proteins": ["Parmegiana de frango", "Maminha ao forno"],
+      "sides": ["Arroz", "Feijão preto", "Legumes", "Salada de folhas"]
+    },
+    {
+      "day": "Friday",
+      "proteins": ["Cupim", "Galinha assada"],
+      "sides": ["Arroz", "Feijão macassar", "Legumes", "Salada de folhas"]
+    },
+    {
+      "day": "Saturday",
+      "proteins": ["Cozido de boi", "Strogonoff de frango"],
+      "sides": ["Arroz", "Feijão mulatinho", "Salada de folhas", "Purê"]
+    },
+    {
+      "day": "Sunday",
+      "proteins": ["Carne de sol", "Galinha guisada"],
+      "sides": ["Arroz", "Feijão preto", "Legumes", "Salada de folhas"]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "answer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Kaê Benning",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon --watch src --exec ts-node src/app.ts",
+    "dev:demo": "nodemon --watch src --exec ts-node src/test.ts"
+  },
+  "devDependencies": {
+    "@types/": "whiskeysockets/baileys",
+    "@types/axios": "^0.14.4",
+    "@types/node": "^22.15.18",
+    "@types/qrcode": "^1.5.5",
+    "@types/typescript": "^2.0.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@whiskeysockets/baileys": "^6.7.17",
+    "axios": "^1.9.0",
+    "dotenv": "^16.5.0",
+    "qrcode": "^1.5.4"
+  }
+}
