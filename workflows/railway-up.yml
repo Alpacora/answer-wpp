@@ -1,0 +1,19 @@
+name: Railway Up
+
+on:
+  schedule:
+    - cron: "0 9 * * 1-5" # 06:00 (Horário de Brasília) em dias úteis
+  workflow_dispatch: # permite executar manualmente
+
+jobs:
+  up:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Railway CLI
+        run: npm install -g railway
+
+      - name: Login with Railway Token
+        run: railway login --token ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Start Service
+        run: railway up --service answer-wpp
