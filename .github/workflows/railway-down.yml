@@ -34,7 +34,7 @@ jobs:
             --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
             --header 'Content-Type: application/json' \
             --data '{
-              "query": "mutation DeleteDeployment($id: String!) { deploymentDelete(id: $id) }",
+              "query": "mutation CancelDeployment($id: String!) { deploymentCancel(id: $id) }",
               "variables": {
                 "id": "'"$DEPLOYMENT_ID"'"
               }
