@@ -1,7 +1,7 @@
 import { Boom } from "@hapi/boom";
 import makeWASocket, {
-    DisconnectReason,
-    useMultiFileAuthState,
+  DisconnectReason,
+  useMultiFileAuthState,
 } from "@whiskeysockets/baileys";
 import * as dotenv from "dotenv";
 import P from "pino";
@@ -111,6 +111,7 @@ async function startBot() {
         type: "terminal",
         small: true,
       });
+      console.log("📲 RAW QR Code:\n", qr);
       console.log("📲 QR Code para login:\n", mountedQrCode);
     }
 

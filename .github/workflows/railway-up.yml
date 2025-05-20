@@ -1,0 +1,17 @@
+name: Start Railway API
+
+on:
+  schedule:
+    - cron: "0 9 * * 1-5" # 6h Brasília (UTC+3)
+  workflow_dispatch:
+
+jobs:
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start Railway project
+        run: |
+          curl -X POST https://backboard.railway.app/graphql \
+            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d '{"query":"mutation { deployProject(input: { projectId: \"${{ secrets.PROJECT_ID }}\" }) { id } }"}'
