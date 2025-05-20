@@ -1,17 +1,41 @@
-name: Stop Railway API
+name: Stop Railway API (Auto)
 
 on:
-  schedule:
-    - cron: "0 12 * * 1-5" # 9h Brasília (UTC+3)
   workflow_dispatch:
 
 jobs:
   stop:
     runs-on: ubuntu-latest
     steps:
-      - name: Stop Railway service
+      - name: Get latest deployment ID
+        id: get_deployment
         run: |
-          curl -X POST https://backboard.railway.app/graphql \
-            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{"query":"mutation { pauseService(input: { serviceId: \"${{ secrets.SERVICE_ID }}\" }) { id } }"}'
+          DEPLOYMENT_ID=$(curl --silent --request POST \
+            --url https://backboard.railway.app/graphql/v2 \
+            --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "query": "query GetLatestDeployment($input: DeploymentListInput!, $first: Int) { deployments(input: $input, first: $first) { edges { node { id } } } }",
+              "variables": {
+                "input": {
+                  "environmentId": "'"${{ secrets.RAILWAY_ENVIRONMENT_ID }}"'",
+                  "serviceId": "'"${{ secrets.RAILWAY_SERVICE_ID }}"'"
+                },
+                "first": 1
+              }
+            }' | jq -r '.data.deployments.edges[0].node.id')
+
+          echo "DEPLOYMENT_ID=$DEPLOYMENT_ID" >> $GITHUB_ENV
+
+      - name: Delete deployment
+        run: |
+          curl --request POST \
+            --url https://backboard.railway.app/graphql/v2 \
+            --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "query": "mutation DeleteDeployment($id: String!) { deploymentDelete(id: $id) }",
+              "variables": {
+                "id": "'"$DEPLOYMENT_ID"'"
+              }
+            }'

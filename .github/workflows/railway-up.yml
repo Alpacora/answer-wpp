@@ -11,7 +11,14 @@ jobs:
     steps:
       - name: Start Railway project
         run: |
-          curl -X POST https://backboard.railway.app/graphql \
-            -H "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
-            -H "Content-Type: application/json" \
-            -d '{"query":"mutation { deployProject(input: { projectId: \"${{ secrets.PROJECT_ID }}\" }) { id } }"}'
+          curl --request POST \
+            --url https://backboard.railway.app/graphql/v2 \
+            --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "query": "mutation serviceInstanceRedeploy($environmentId: String!, $serviceId: String!) { serviceInstanceRedeploy(environmentId: $environmentId, serviceId: $serviceId) }",
+              "variables": {
+                "environmentId": "'"${{ secrets.RAILWAY_ENVIRONMENT_ID }}"'",
+                "serviceId": "'"${{ secrets.RAILWAY_SERVICE_ID }}"'"
+              }
+            }'

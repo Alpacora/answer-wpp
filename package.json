@@ -13,6 +13,7 @@
   "devDependencies": {
     "@types/": "whiskeysockets/baileys",
     "@types/axios": "^0.14.4",
+    "@types/mongodb": "^4.0.7",
     "@types/node": "^22.15.18",
     "@types/qrcode": "^1.5.5",
     "@types/typescript": "^2.0.0",
@@ -24,6 +25,7 @@
     "@whiskeysockets/baileys": "^6.7.17",
     "axios": "^1.9.0",
     "dotenv": "^16.5.0",
+    "mongodb": "^6.16.0",
     "qrcode": "^1.5.4"
   },
   "engines": {
