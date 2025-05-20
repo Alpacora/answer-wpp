@@ -139,12 +139,12 @@ async function startBot() {
         message.message?.conversation ||
         message.message?.extendedTextMessage?.text;
 
-      const isMenu = messageText.includes("Cardápio");
-      const confirmLunch = messageText.includes("Ok");
-
       console.log(`📩 Nova mensagem de ${message.pushName}`);
 
       if (jid === target) {
+        const isMenu = messageText.includes("Cardápio");
+        const confirmLunch = messageText.includes("Ok");
+
         if (isMenu) {
           console.log("📥 Menu identificado, processando...");
           const response = choiceLunch(messageText);
