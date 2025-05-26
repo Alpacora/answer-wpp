@@ -8,18 +8,18 @@ import P from "pino";
 import QRCode from "qrcode";
 
 import fs from "fs";
-import { DAYS_OF_WEEK, NOT_REQUIRED_SIDES } from "./constants";
-import firstWeek from "./menus/week_01.json";
-import { normalizeBens } from "./utils";
+import { NOT_REQUIRED_SIDES } from "./constants";
+import firstWeek from "./menus/lunch_options.json";
+import { normalizeBens, randomIntFromInterval } from "./utils";
 
 dotenv.config();
 
 const target = process.env.TARGET_WA_ID;
 
 function choiceLunch(menu: string): string {
-  const DATE = new Date();
   let lunchTodDay = undefined;
-  let nextDay = 0;
+  let attempts = 1;
+  const MAX_ATTEMPTS = 100;
   const normalizedMenu = normalizeBens(
     menu.toLowerCase().replaceAll("\n", " ")
   );
@@ -28,23 +28,21 @@ function choiceLunch(menu: string): string {
   console.log("📅 Iniciando verificação de cardápio...");
   console.log("📄 Menu recebido:", menu);
 
-  while (!lunchTodDay && nextDay < 7) {
-    const dayIndex = DATE.getDay() + nextDay;
+  while (!lunchTodDay && attempts < MAX_ATTEMPTS) {
+    const randomNumber = randomIntFromInterval(0, 100);
 
-    if (dayIndex >= DAYS_OF_WEEK.length) {
-      console.warn("⚠️ Índice de dia da semana fora do intervalo!");
-      break;
-    }
+    console.log(`🔍 Verificando o index: ${randomNumber}`);
 
-    const dayName = DAYS_OF_WEEK[dayIndex];
-    console.log(`🔍 Verificando dia: ${dayName}`);
-
-    const choice = firstWeek.week.find((element) => element.day === dayName);
+    const choice = firstWeek.week.find(
+      (element) => element.day === randomNumber.toString()
+    );
     console.log("🚀 ~ choiceLunch ~ choice:", choice);
 
     if (!choice) {
-      console.warn(`❌ Nenhuma entrada encontrada para o dia: ${dayName}`);
-      nextDay++;
+      console.warn(
+        `❌ Nenhuma entrada encontrada para o index: ${randomNumber}`
+      );
+      attempts++;
       continue;
     }
 
@@ -69,7 +67,7 @@ function choiceLunch(menu: string): string {
       console.log("✅ Dia de almoço encontrado:", lunchTodDay.day);
     } else {
       console.log("⏭️ Avançando para o próximo dia...");
-      nextDay++;
+      attempts++;
     }
   }
 
