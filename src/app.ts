@@ -7,6 +7,7 @@ import * as dotenv from "dotenv";
 import P from "pino";
 import QRCode from "qrcode";
 
+import fs from "fs";
 import { DAYS_OF_WEEK, NOT_REQUIRED_SIDES } from "./constants";
 import firstWeek from "./menus/week_01.json";
 import { normalizeBens } from "./utils";
@@ -94,7 +95,13 @@ ${lunchTodDay.sides.map((side) => `- ${side}`).join("\n")}
 }
 
 async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState("auth_info_baileys");
+  const { state, saveCreds } = await useMultiFileAuthState(
+    "/auth_info_baileys"
+  );
+  console.log(
+    "📁 Lista de arquivos no volume:",
+    fs.readdirSync("/auth_info_baileys")
+  );
 
   const sock = makeWASocket({
     auth: state,
