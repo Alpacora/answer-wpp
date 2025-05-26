@@ -1,6 +1,8 @@
 name: Stop Railway API (Auto)
 
 on:
+  schedule:
+    - cron: "0 12 * * 1-5" # 6h Brasília (UTC+3)
   workflow_dispatch:
 
 jobs:
