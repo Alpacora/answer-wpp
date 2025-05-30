@@ -79,7 +79,7 @@ function choiceLunch(menu: string): string {
 
   if (!lunchTodDay) {
     console.error("❌ Nenhum dia corresponde ao menu informado.");
-    return "Não foi possível identificar o dia correspondente ao cardápio enviado.";
+    return;
   }
 
   const message = `
