@@ -1,0 +1,184 @@
+{
+  "week": [
+    {
+      "day": "1",
+      "proteins": ["Bife acebolado", "Guisado de boi"],
+      "sides": ["Legumes", "Arroz", "Feijão preto"]
+    },
+    {
+      "day": "2",
+      "proteins": ["Lombo recheado de carne moída"],
+      "sides": ["Salada de folhas", "Purê", "Feijão macassar"]
+    },
+    {
+      "day": "3",
+      "proteins": ["Galinha assada"],
+      "sides": ["Salada de folhas", "Legumes", "Feijão macassar"]
+    },
+    {
+      "day": "4",
+      "proteins": ["Parmegiana de frango", "Lombo recheado de carne moída"],
+      "sides": ["Legumes", "Purê", "Feijão mulatinho"]
+    },
+    {
+      "day": "5",
+      "proteins": ["Lombo de boi", "Lombo recheado de carne moída"],
+      "sides": ["Legumes", "Salada de folhas", "Feijão preto"]
+    },
+    {
+      "day": "6",
+      "proteins": ["Maminha ao forno", "Lombo de boi"],
+      "sides": ["Salada de folhas", "Legumes", "Feijão mulatinho"]
+    },
+    {
+      "day": "7",
+      "proteins": ["Parmegiana de frango", "Guisado de boi"],
+      "sides": ["Salada de folhas", "Purê", "Feijão preto"]
+    },
+    {
+      "day": "8",
+      "proteins": ["Strogonoff de frango", "Galinha assada"],
+      "sides": ["Salada de folhas", "Purê", "Feijão mulatinho"]
+    },
+    {
+      "day": "9",
+      "proteins": ["Strogonoff de frango", "Bife acebolado"],
+      "sides": ["Purê", "Legumes", "Feijão preto"]
+    },
+    {
+      "day": "10",
+      "proteins": ["Parmegiana de frango", "Strogonoff de frango"],
+      "sides": ["Purê", "Legumes", "Feijão macassar"]
+    },
+    {
+      "day": "11",
+      "proteins": ["Lombo de boi", "Galinha assada"],
+      "sides": ["Legumes", "Arroz", "Feijão macassar"]
+    },
+    {
+      "day": "12",
+      "proteins": ["Maminha ao forno", "Guisado de boi"],
+      "sides": ["Purê", "Salada de folhas", "Feijão macassar"]
+    },
+    {
+      "day": "13",
+      "proteins": ["Maminha ao forno", "Strogonoff de frango"],
+      "sides": ["Legumes", "Purê", "Feijão preto"]
+    },
+    {
+      "day": "14",
+      "proteins": ["Strogonoff de frango", "Lombo de boi"],
+      "sides": ["Arroz", "Legumes", "Feijão mulatinho"]
+    },
+    {
+      "day": "15",
+      "proteins": ["Maminha ao forno", "Galinha assada"],
+      "sides": ["Salada de folhas", "Arroz", "Feijão mulatinho"]
+    },
+    {
+      "day": "16",
+      "proteins": ["Parmegiana de frango", "Maminha ao forno"],
+      "sides": ["Salada de folhas", "Arroz", "Feijão preto"]
+    },
+    {
+      "day": "17",
+      "proteins": ["Lombo de boi"],
+      "sides": ["Legumes", "Arroz", "Feijão preto"]
+    },
+    {
+      "day": "18",
+      "proteins": ["Strogonoff de frango"],
+      "sides": ["Legumes", "Salada de folhas", "Feijão macassar"]
+    },
+    {
+      "day": "19",
+      "proteins": ["Strogonoff de frango", "Guisado de boi"],
+      "sides": ["Legumes", "Purê", "Feijão macassar"]
+    },
+    {
+      "day": "20",
+      "proteins": ["Galinha assada", "Lombo recheado de carne moída"],
+      "sides": ["Salada de folhas", "Arroz", "Feijão mulatinho"]
+    },
+    {
+      "day": "21",
+      "proteins": ["Parmegiana de frango", "Galinha assada"],
+      "sides": ["Arroz", "Salada de folhas", "Feijão mulatinho"]
+    },
+    {
+      "day": "22",
+      "proteins": ["Guisado de boi"],
+      "sides": ["Purê", "Arroz", "Feijão preto"]
+    },
+    {
+      "day": "23",
+      "proteins": ["Bife acebolado", "Lombo recheado de carne moída"],
+      "sides": ["Purê", "Salada de folhas", "Feijão mulatinho"]
+    },
+    {
+      "day": "24",
+      "proteins": ["Lombo de boi", "Bife acebolado"],
+      "sides": ["Legumes", "Purê", "Feijão preto"]
+    },
+    {
+      "day": "25",
+      "proteins": ["Galinha assada", "Guisado de boi"],
+      "sides": ["Salada de folhas", "Arroz", "Feijão macassar"]
+    },
+    {
+      "day": "26",
+      "proteins": ["Maminha ao forno"],
+      "sides": ["Salada de folhas", "Arroz", "Feijão mulatinho"]
+    },
+    {
+      "day": "27",
+      "proteins": ["Parmegiana de frango"],
+      "sides": ["Salada de folhas", "Purê", "Feijão preto"]
+    },
+    {
+      "day": "28",
+      "proteins": ["Maminha ao forno", "Bife acebolado"],
+      "sides": ["Purê", "Legumes", "Feijão mulatinho"]
+    },
+    {
+      "day": "29",
+      "proteins": ["Maminha ao forno", "Lombo recheado de carne moída"],
+      "sides": ["Arroz", "Salada de folhas", "Feijão mulatinho"]
+    },
+    {
+      "day": "30",
+      "proteins": ["Parmegiana de frango", "Bife acebolado"],
+      "sides": ["Arroz", "Salada de folhas", "Feijão preto"]
+    },
+    {
+      "day": "31",
+      "proteins": ["Parmegiana de frango", "Lombo de boi"],
+      "sides": ["Legumes", "Arroz", "Feijão preto"]
+    },
+    {
+      "day": "32",
+      "proteins": ["Guisado de boi", "Lombo recheado de carne moída"],
+      "sides": ["Purê", "Arroz", "Feijão preto"]
+    },
+    {
+      "day": "33",
+      "proteins": ["Lombo de boi", "Guisado de boi"],
+      "sides": ["Salada de folhas", "Arroz", "Feijão preto"]
+    },
+    {
+      "day": "34",
+      "proteins": ["Galinha assada", "Bife acebolado"],
+      "sides": ["Purê", "Salada de folhas", "Feijão mulatinho"]
+    },
+    {
+      "day": "35",
+      "proteins": ["Bife acebolado"],
+      "sides": ["Purê", "Salada de folhas", "Feijão mulatinho"]
+    },
+    {
+      "day": "36",
+      "proteins": ["Strogonoff de frango", "Lombo recheado de carne moída"],
+      "sides": ["Purê", "Salada de folhas", "Feijão mulatinho"]
+    }
+  ]
+}

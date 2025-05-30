@@ -8,7 +8,8 @@
     "dev": "nodemon --watch src --exec ts-node src/app.ts",
     "start": "node dist/app.js",
     "build": "tsc",
-    "dev:demo": "nodemon --watch src --exec ts-node src/test.ts"
+    "dev:demo": "nodemon --watch src --exec ts-node src/test.ts",
+    "dev:sandbox": "nodemon --watch src --exec ts-node src/sandbox/index.ts"
   },
   "devDependencies": {
     "@types/": "whiskeysockets/baileys",

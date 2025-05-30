@@ -1,6 +1,6 @@
-export function normalizeBens(normalizedMenu: string) {
+export function normalizeBeans(normalizedMenu: string) {
   normalizedMenu = normalizedMenu.replace("preto", "feijão preto");
-  normalizedMenu = normalizedMenu.replace("macassar", "feijão maccassar");
+  normalizedMenu = normalizedMenu.replace("macassar", "feijão macassar");
   normalizedMenu = normalizedMenu.replace("mulato", "feijão mulato");
 
   return normalizedMenu;

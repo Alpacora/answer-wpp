@@ -9,8 +9,9 @@ import QRCode from "qrcode";
 
 import fs from "fs";
 import { NOT_REQUIRED_SIDES } from "./constants";
-import firstWeek from "./menus/lunch_options.json";
-import { normalizeBens, randomIntFromInterval } from "./utils";
+import choiceMenu from "./menus/max_healthy_lunch_combinations.json";
+import { normalizeBeans, randomIntFromInterval } from "./utils";
+import { logToFile } from "./utils/logs";
 
 dotenv.config();
 
@@ -20,20 +21,19 @@ function choiceLunch(menu: string): string {
   let lunchTodDay = undefined;
   let attempts = 1;
   const MAX_ATTEMPTS = 100;
-  const normalizedMenu = normalizeBens(
+  const normalizedMenu = normalizeBeans(
     menu.toLowerCase().replaceAll("\n", " ")
   );
-  console.log("🚀 ~ choiceLunch ~ normalizedMenu:", normalizedMenu);
 
+  console.log("📄 Menu sanitizado recebido:", normalizedMenu);
   console.log("📅 Iniciando verificação de cardápio...");
-  console.log("📄 Menu recebido:", menu);
 
   while (!lunchTodDay && attempts < MAX_ATTEMPTS) {
-    const randomNumber = randomIntFromInterval(0, 100);
+    const randomNumber = randomIntFromInterval(1, 100);
 
-    console.log(`🔍 Verificando o index: ${randomNumber}`);
+    console.log(`🔍 Verificando posição sorteada: ${randomNumber}`);
 
-    const choice = firstWeek.week.find(
+    const choice = choiceMenu.week.find(
       (element) => element.day === randomNumber.toString()
     );
     console.log("🚀 ~ choiceLunch ~ choice:", choice);
@@ -65,6 +65,12 @@ function choiceLunch(menu: string): string {
     if (hasAllProteins && hasAllSides) {
       lunchTodDay = choice;
       console.log("✅ Dia de almoço encontrado:", lunchTodDay.day);
+
+      logToFile(
+        `Almoço escolhido no dia ${new Date().toLocaleDateString(
+          "pt-br"
+        )} : ${randomNumber}`
+      );
     } else {
       console.log("⏭️ Avançando para o próximo dia...");
       attempts++;
@@ -151,7 +157,6 @@ async function startBot() {
         const confirmLunch = messageText.includes("Ok");
 
         if (isMenu) {
-          console.log("📥 Menu identificado, processando...");
           const response = choiceLunch(messageText);
           await sock.sendMessage(jid, { text: response });
         }
