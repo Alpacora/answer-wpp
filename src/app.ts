@@ -4,10 +4,11 @@ import makeWASocket, {
   useMultiFileAuthState,
 } from "@whiskeysockets/baileys";
 import * as dotenv from "dotenv";
+import fs from "node:fs";
 import P from "pino";
 import QRCode from "qrcode";
 
-import fs from "fs";
+import path from "node:path";
 import { NOT_REQUIRED_SIDES } from "./constants";
 import choiceMenu from "./menus/max_healthy_lunch_combinations.json";
 import { normalizeBeans, randomIntFromInterval } from "./utils";
@@ -15,7 +16,8 @@ import { logToFile } from "./utils/logs";
 
 dotenv.config();
 
-const target = process.env.TARGET_WA_ID.split("@")[0];
+const authPath = path.resolve(__dirname, "../auth_info_baileys");
+const target = process.env.TARGET_WA_ID?.split("@")[0];
 
 function choiceLunch(menu: string): string {
   let lunchTodDay = undefined;
@@ -99,13 +101,8 @@ ${lunchTodDay.sides.map((side) => `- ${side}`).join("\n")}
 }
 
 async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState(
-    "/auth_info_baileys"
-  );
-  console.log(
-    "📁 Lista de arquivos no volume:",
-    fs.readdirSync("/auth_info_baileys")
-  );
+  const { state, saveCreds } = await useMultiFileAuthState(authPath);
+  console.log("📁 Lista de arquivos no volume:", fs.readdirSync(authPath));
 
   const sock = makeWASocket({
     auth: state,
