@@ -15,7 +15,7 @@ import { logToFile } from "./utils/logs";
 
 dotenv.config();
 
-const target = process.env.TARGET_WA_ID;
+const target = process.env.TARGET_WA_ID.split("@")[0];
 
 function choiceLunch(menu: string): string {
   let lunchTodDay = undefined;
@@ -142,15 +142,18 @@ async function startBot() {
     if (type !== "notify") return;
 
     for (const message of messages) {
-      console.log("🚀 ~ sock.ev.on ~ message:", message);
-      const jid = message.key.remoteJid;
+      console.log(`📩 Nova mensagem de ${message.pushName}`);
+
+      console.log("📩 ~ sock.ev.on ~ message:", message);
+
+      const jid = message.key.participant.split("@")[0];
+
       console.log("🚀 ~ sock.ev.on ~ jid:", jid);
       console.log("🚀 ~ sock.ev.on ~ target:", target);
+
       const messageText =
         message.message?.conversation ||
         message.message?.extendedTextMessage?.text;
-
-      console.log(`📩 Nova mensagem de ${message.pushName}`);
 
       if (jid === target) {
         const isMenu = messageText.includes("Cardápio");
