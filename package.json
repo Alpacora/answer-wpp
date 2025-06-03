@@ -12,7 +12,6 @@
     "dev:sandbox": "nodemon --watch src --exec ts-node src/sandbox/index.ts"
   },
   "devDependencies": {
-    "@types/": "whiskeysockets/baileys",
     "@types/axios": "^0.14.4",
     "@types/mongodb": "^4.0.7",
     "@types/node": "^22.15.18",
