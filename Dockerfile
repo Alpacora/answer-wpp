@@ -17,9 +17,8 @@ COPY . .
 RUN npm run build && curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
 
 # Expõe as portas:
-# - 3000 para sua aplicação Node
-# - 8080 para o painel Filebrowser
-EXPOSE 3000 8080
+# - 3000 para sua aplicação Node e filebrowser
+EXPOSE 3000 
 
 # Inicia o Node e o Filebrowser no mesmo container
-CMD ["sh", "-c", "npm start & ./filebrowser --port 8080 --root /data"]
+CMD ["sh", "-c", "npm start & ./filebrowser --port 3000 --root /data"]
