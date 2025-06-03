@@ -143,7 +143,7 @@ async function startBot() {
 
       console.log("📩 ~ sock.ev.on ~ message:", message);
 
-      const jid = message.key.participant.split("@")[0];
+      const jid = message.key.participant?.split("@")[0];
 
       console.log("🚀 ~ sock.ev.on ~ jid:", jid);
       console.log("🚀 ~ sock.ev.on ~ target:", target);
