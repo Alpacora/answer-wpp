@@ -1,24 +1,31 @@
-# Usa imagem oficial do Node.js
-FROM node:22
+# Etapa 1: build do projeto
+FROM node:22 AS builder
+WORKDIR /usr/src/app
 
-# Define o diretório de trabalho no container
-WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
 
-# Copia apenas os arquivos de dependência para aproveitar o cache
-COPY package*.json ./
-
-# Instala dependências do projeto
-RUN npm install
-
-# Copia o restante dos arquivos do projeto
 COPY . .
+RUN yarn build
 
-# Se o projeto usa TypeScript, descomente a linha abaixo:
-RUN npm run build && curl -fsSL https://raw.githubusercontent.com/filebrowser/get/master/get.sh | bash
+# Etapa 2: app final + filebrowser
+FROM node:22
+WORKDIR /usr/src/app
 
-# Expõe as portas:
-# - 3000 para sua aplicação Node e filebrowser
-EXPOSE 3000 
+COPY --from=builder /usr/src/app/dist ./dist
+COPY --from=builder /usr/src/app/package.json ./
+COPY --from=builder /usr/src/app/node_modules ./node_modules
+COPY --from=builder /usr/src/app/.env .env
 
-# Inicia o Node e o Filebrowser no mesmo container
-CMD ["sh", "-c", "npm start & ./filebrowser --port 3000 --root /data"]
+# Instala o File Browser corretamente
+RUN curl -fsSL https://github.com/filebrowser/filebrowser/releases/latest/download/linux-amd64-filebrowser.tar.gz \
+  | tar -xz -C /usr/local/bin && chmod +x /usr/local/bin/filebrowser
+
+# Copia o entrypoint customizado
+COPY entrypoint.sh /usr/src/app/entrypoint.sh
+RUN chmod +x /usr/src/app/entrypoint.sh
+
+VOLUME ["/usr/src/app/auth_info_baileys"]
+EXPOSE 3000 8080
+
+CMD ["/usr/src/app/entrypoint.sh"]
