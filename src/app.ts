@@ -4,20 +4,24 @@ import makeWASocket, {
   useMultiFileAuthState,
 } from "@whiskeysockets/baileys";
 import * as dotenv from "dotenv";
-import fs from "node:fs";
 import P from "pino";
-import QRCode from "qrcode";
 
+import {
+  generateQrCode,
+  logToFile,
+  normalizeBeans,
+  randomIntFromInterval,
+} from "@utils";
 import path from "node:path";
 import { NOT_REQUIRED_SIDES } from "./constants";
 import choiceMenu from "./menus/max_healthy_lunch_combinations.json";
-import { normalizeBeans, randomIntFromInterval } from "./utils";
-import { logToFile } from "./utils/logs";
 
 dotenv.config();
 
-const authPath = path.resolve(__dirname, "../auth_info_baileys");
+const AUTH_PATH = path.join(__dirname, "../auth_info_baileys");
 const target = process.env.TARGET_WA_ID?.split("@")[0];
+
+console.log("🚀 ~ authPath:", AUTH_PATH);
 
 function choiceLunch(menu: string): string {
   let lunchTodDay = undefined;
@@ -73,9 +77,17 @@ function choiceLunch(menu: string): string {
           "pt-br"
         )} : ${randomNumber}`
       );
+
+      break;
     } else {
       console.log("⏭️ Avançando para o próximo dia...");
       attempts++;
+    }
+
+    if (attempts >= MAX_ATTEMPTS) {
+      logToFile(
+        `Após ${attempts} tentativas, nenhuma combinação de almoço foi feita`
+      );
     }
   }
 
@@ -85,7 +97,7 @@ function choiceLunch(menu: string): string {
   }
 
   const message = `
-Bom dia! 
+Bom dia!
 🍱 Quentinha *Grande*:
 
 🥩 *Proteínas*:
@@ -101,8 +113,7 @@ ${lunchTodDay.sides.map((side) => `- ${side}`).join("\n")}
 }
 
 async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState(authPath);
-  console.log("📁 Lista de arquivos no volume:", fs.readdirSync(authPath));
+  const { state, saveCreds } = await useMultiFileAuthState(AUTH_PATH);
 
   const sock = makeWASocket({
     auth: state,
@@ -114,20 +125,14 @@ async function startBot() {
   sock.ev.on("connection.update", async (update) => {
     const { connection, lastDisconnect, qr } = update;
 
-    if (qr) {
-      const mountedQrCode = await QRCode.toString(qr, {
-        type: "terminal",
-        small: true,
-      });
-      console.log("📲 RAW QR Code:\n", qr);
-      console.log("📲 QR Code para login:\n", mountedQrCode);
-    }
+    generateQrCode(qr);
 
-    if (
+    const restartBot =
       connection === "close" &&
       (lastDisconnect?.error as Boom)?.output?.statusCode ===
-        DisconnectReason.restartRequired
-    ) {
+        DisconnectReason.restartRequired;
+
+    if (restartBot) {
       console.warn("🔄 Conexão fechada, reiniciando bot...");
       await startBot();
     } else if (connection === "open") {

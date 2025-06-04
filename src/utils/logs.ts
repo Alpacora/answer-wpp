@@ -14,6 +14,6 @@ export async function logToFile(message: string) {
   try {
     await fileSystem.appendFile(logFilePath, fullMessage, "utf8");
   } catch (error) {
-    console.log("🚀 ~ logToFile ~ error:", error);
+    console.error("🚀 ~ logToFile ~ error:", error);
   }
 }
