@@ -1,24 +1,24 @@
-name: Start Railway API
+# name: Start Railway API
 
-on:
-  schedule:
-    - cron: "0 9 * * 1-5" # 6h Brasília (UTC+3)
-  workflow_dispatch:
+# on:
+#   schedule:
+#     - cron: "0 9 * * 1-5" # 6h Brasília (UTC+3)
+#   workflow_dispatch:
 
-jobs:
-  start:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Start Railway project
-        run: |
-          curl --request POST \
-            --url https://backboard.railway.app/graphql/v2 \
-            --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
-            --header 'Content-Type: application/json' \
-            --data '{
-              "query": "mutation serviceInstanceRedeploy($environmentId: String!, $serviceId: String!) { serviceInstanceRedeploy(environmentId: $environmentId, serviceId: $serviceId) }",
-              "variables": {
-                "environmentId": "'"${{ secrets.RAILWAY_ENVIRONMENT_ID }}"'",
-                "serviceId": "'"${{ secrets.RAILWAY_SERVICE_ID }}"'"
-              }
-            }'
+# jobs:
+#   start:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Start Railway project
+#         run: |
+#           curl --request POST \
+#             --url https://backboard.railway.app/graphql/v2 \
+#             --header "Authorization: Bearer ${{ secrets.RAILWAY_TOKEN }}" \
+#             --header 'Content-Type: application/json' \
+#             --data '{
+#               "query": "mutation serviceInstanceRedeploy($environmentId: String!, $serviceId: String!) { serviceInstanceRedeploy(environmentId: $environmentId, serviceId: $serviceId) }",
+#               "variables": {
+#                 "environmentId": "'"${{ secrets.RAILWAY_ENVIRONMENT_ID }}"'",
+#                 "serviceId": "'"${{ secrets.RAILWAY_SERVICE_ID }}"'"
+#               }
+#             }'
