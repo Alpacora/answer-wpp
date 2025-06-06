@@ -1,4 +1,5 @@
 import { logToFile, normalizeBeans, randomIntFromInterval } from "@utils";
+import makeWASocket from "@whiskeysockets/baileys";
 import { NOT_REQUIRED_SIDES } from "../constants";
 import choiceMenu from "../menus/max_healthy_lunch_combinations.json";
 
@@ -71,7 +72,7 @@ export function choiceLunch(menu: string): string {
   }
 
   if (!lunchTodDay) {
-    console.log("🚀 ~ choiceLunch ~ lunchTodDay: FAILS")
+    console.log("🚀 ~ choiceLunch ~ lunchTodDay: FAILS");
     console.error("❌ Nenhum dia corresponde ao menu informado.");
     return;
   }
@@ -90,4 +91,30 @@ ${lunchTodDay.sides.map((side) => `- ${side}`).join("\n")}
   console.log("📤 Mensagem gerada:\n", message);
 
   return message;
+}
+
+export async function sendsChosenLunch(
+  sock: ReturnType<typeof makeWASocket>,
+  messageText: string,
+  jidNumber: string
+) {
+  const target = process.env.TARGET_WA_ID?.split("@")[0];
+  console.log("🚀 ~ target:", target);
+
+  if (jidNumber === target) {
+    const isMenu = messageText.includes("Cardápio");
+    const confirmLunch = messageText.includes("Ok");
+
+    if (isMenu) {
+      const response = choiceLunch(messageText);
+      await sock.sendMessage(`${jidNumber}@s.whatsapp.net`, {
+        text: response,
+      });
+    }
+
+    if (confirmLunch) {
+      console.log("✅ Almoço confirmado pelo usuário!");
+      // TODO: Make a payment
+    }
+  }
 }

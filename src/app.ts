@@ -6,16 +6,12 @@ import makeWASocket, {
 import * as dotenv from "dotenv";
 import P from "pino";
 
-import {
-  choiceLunch,
-  generateQrCode
-} from "@utils";
+import { generateQrCode, sendsChosenLunch } from "@utils";
 import path from "node:path";
 
 dotenv.config();
 
 const AUTH_PATH = path.join(__dirname, "../auth_info_baileys");
-const target = process.env.TARGET_WA_ID?.split("@")[0];
 
 console.log("🚀 ~ authPath:", AUTH_PATH);
 
@@ -55,31 +51,17 @@ async function startBot() {
 
       console.log("📩 ~ sock.ev.on ~ message:", message);
 
-      const jid = (message.key.participant || message.key.remoteJid)?.split(
-        "@"
-      )[0];
+      const jidNumber = (
+        message.key.participant || message.key.remoteJid
+      )?.split("@")[0];
 
-      console.log("🚀 ~ sock.ev.on ~ jid:", jid);
-      console.log("🚀 ~ sock.ev.on ~ target:", target);
+      console.log("🚀 ~ sock.ev.on ~ jid:", jidNumber);
 
       const messageText =
         message.message?.conversation ||
         message.message?.extendedTextMessage?.text;
 
-      if (jid === target) {
-        const isMenu = messageText.includes("Cardápio");
-        const confirmLunch = messageText.includes("Ok");
-
-        if (isMenu) {
-          const response = choiceLunch(messageText);
-          await sock.sendMessage(jid, { text: response });
-        }
-
-        if (confirmLunch) {
-          console.log("✅ Almoço confirmado pelo usuário!");
-          // TODO: Make a payment
-        }
-      }
+      sendsChosenLunch(sock, messageText, jidNumber);
     }
   });
 }
