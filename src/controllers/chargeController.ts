@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Db, ObjectId } from "mongodb";
-import { chargeSchemaResponse } from "src/schemas/chargeSchema";
+import { chargeSchemaResponse } from "../schemas/chargeSchema";
 
 export class ChargeController {
   COLLECTION_TO_CONNECT: string = "contacts";
