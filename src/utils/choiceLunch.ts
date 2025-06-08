@@ -74,7 +74,7 @@ export function choiceLunch(menu: string): string {
   if (!lunchTodDay) {
     console.log("🚀 ~ choiceLunch ~ lunchTodDay: FAILS");
     console.error("❌ Nenhum dia corresponde ao menu informado.");
-    return;
+    return "";
   }
 
   const message = `
@@ -107,6 +107,9 @@ export async function sendsChosenLunch(
 
     if (isMenu) {
       const response = choiceLunch(messageText);
+      if (!response) {
+        return;
+      }
       await sock.sendMessage(`${jidNumber}@s.whatsapp.net`, {
         text: response,
       });
