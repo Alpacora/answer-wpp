@@ -13,6 +13,7 @@ const AUTH_PATH = path.join(__dirname, "../auth_info_baileys");
 
 export class AutoLunchBotService {
   COLLECTION_TO_CONNECT: string = "contacts";
+  private qrCodeDataURL: string = "";
   private sock: ReturnType<typeof makeWASocket> | undefined;
   private readonly database: Db;
 
@@ -38,7 +39,7 @@ export class AutoLunchBotService {
     sock.ev.on("connection.update", async (update) => {
       const { connection, lastDisconnect, qr } = update;
 
-      generateQrCode(qr);
+      this.qrCodeDataURL = await generateQrCode(qr);
 
       const restartBot =
         connection === "close" &&
@@ -85,5 +86,9 @@ export class AutoLunchBotService {
 
   isRunning(): boolean {
     return !!this.sock;
+  }
+
+  getQrCodeDataURL(): string {
+    return this.qrCodeDataURL;
   }
 }

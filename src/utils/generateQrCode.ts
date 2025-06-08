@@ -8,6 +8,8 @@ export async function generateQrCode(qrCode: string) {
       small: true,
     });
     console.log("📲 QR Code:\n", mountedQrCode);
+    const dataURL = await QRCode.toDataURL(qrCode);
+    return dataURL;
   } catch (error) {
     console.error("🚀 ~ generateQrCode ~ error:", error);
   }

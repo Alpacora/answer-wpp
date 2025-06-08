@@ -40,6 +40,10 @@ async function routes(fastify: FastifyInstance, options: Object) {
   );
 
   // BOT
+  fastify.get("/bot/lunch/qr-code", (request, reply) => {
+    const controller = request.diScope.resolve("autoLunchBotController");
+    return controller.generateQRCode(request, reply);
+  });
   fastify.post("/bot/lunch/start", (request, reply) => {
     const controller = request.diScope.resolve("autoLunchBotController");
     return controller.startBotHandler(request, reply);
