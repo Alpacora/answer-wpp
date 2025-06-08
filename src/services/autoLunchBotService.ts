@@ -9,7 +9,7 @@ import { Db } from "mongodb";
 import path from "node:path";
 import P from "pino";
 
-const AUTH_PATH = path.join(__dirname, "../auth_info_baileys");
+const AUTH_PATH = path.join(__dirname, "../../auth_info_baileys");
 
 export class AutoLunchBotService {
   COLLECTION_TO_CONNECT: string = "contacts";
