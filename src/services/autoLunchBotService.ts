@@ -1,0 +1,89 @@
+import { Boom } from "@hapi/boom";
+import { generateQrCode, sendsChosenLunch } from "@utils";
+import { sendsChargeMessage } from "@utils/sendsChargeMessage";
+import makeWASocket, {
+  DisconnectReason,
+  useMultiFileAuthState,
+} from "@whiskeysockets/baileys";
+import { Db } from "mongodb";
+import path from "node:path";
+import P from "pino";
+
+const AUTH_PATH = path.join(__dirname, "../auth_info_baileys");
+
+export class AutoLunchBotService {
+  COLLECTION_TO_CONNECT: string = "contacts";
+  private sock: ReturnType<typeof makeWASocket> | undefined;
+  private readonly database: Db;
+
+  constructor({ database }: { database: Db }) {
+    this.database = database;
+  }
+
+  async start() {
+    const { state, saveCreds } = await useMultiFileAuthState(AUTH_PATH);
+
+    const sock = makeWASocket({
+      auth: state,
+      logger: P(),
+    });
+
+    this.sock = sock;
+
+    const collection = this.database.collection(this.COLLECTION_TO_CONNECT);
+    const contacts = await collection.find().toArray();
+
+    sock.ev.on("creds.update", saveCreds);
+
+    sock.ev.on("connection.update", async (update) => {
+      const { connection, lastDisconnect, qr } = update;
+
+      generateQrCode(qr);
+
+      const restartBot =
+        connection === "close" &&
+        (lastDisconnect?.error as Boom)?.output?.statusCode ===
+          DisconnectReason.restartRequired;
+
+      if (restartBot) {
+        console.warn("🔄 Conexão fechada, reiniciando bot...");
+        await this.start();
+      } else if (connection === "open") {
+        console.log("✅ Conectado ao WhatsApp com sucesso!");
+      }
+    });
+
+    sock.ev.on("messages.upsert", async ({ type, messages }) => {
+      if (type !== "notify") return;
+
+      for (const message of messages) {
+        console.log(`📩 Nova mensagem de ${message.pushName}`);
+
+        const jidNumber = (
+          message.key.participant || message.key.remoteJid
+        )?.split("@")[0];
+
+        const messageText =
+          message.message?.conversation ||
+          message.message?.extendedTextMessage?.text;
+
+        sendsChosenLunch(sock, messageText, jidNumber);
+        sendsChargeMessage(sock, contacts);
+      }
+    });
+  }
+
+  async stop() {
+    if (this.sock) {
+      console.log("🛑 Parando o bot...");
+      this.sock.end(new Error("Shutdown..."));
+      this.sock = undefined;
+    } else {
+      console.log("⚠️ Bot não está ativo.");
+    }
+  }
+
+  isRunning(): boolean {
+    return !!this.sock;
+  }
+}

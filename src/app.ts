@@ -1,69 +1,48 @@
-import { Boom } from "@hapi/boom";
-import makeWASocket, {
-  DisconnectReason,
-  useMultiFileAuthState,
-} from "@whiskeysockets/baileys";
 import * as dotenv from "dotenv";
-import P from "pino";
 
-import { generateQrCode, sendsChosenLunch } from "@utils";
-import path from "node:path";
+import { fastifyAwilixPlugin } from "@fastify/awilix";
+import fastifyCors from "@fastify/cors";
+import Fastify from "fastify";
+import {
+  serializerCompiler,
+  validatorCompiler,
+  ZodTypeProvider,
+} from "fastify-type-provider-zod";
+import dbConnector from "./database/connection";
+import dependencyInjection from "./dependencyInjection";
+import routes from "./routes";
 
 dotenv.config();
 
-const AUTH_PATH = path.join(__dirname, "../auth_info_baileys");
+const start = async () => {
+  const fastify = Fastify({
+    logger: true,
+  }).withTypeProvider<ZodTypeProvider>();
 
-console.log("🚀 ~ authPath:", AUTH_PATH);
+  fastify.setValidatorCompiler(validatorCompiler);
+  fastify.setSerializerCompiler(serializerCompiler);
 
-async function startBot() {
-  const { state, saveCreds } = await useMultiFileAuthState(AUTH_PATH);
-
-  const sock = makeWASocket({
-    auth: state,
-    logger: P(),
+  fastify.register(dbConnector);
+  fastify.register(fastifyCors, {
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
   });
 
-  sock.ev.on("creds.update", saveCreds);
-
-  sock.ev.on("connection.update", async (update) => {
-    const { connection, lastDisconnect, qr } = update;
-
-    generateQrCode(qr);
-
-    const restartBot =
-      connection === "close" &&
-      (lastDisconnect?.error as Boom)?.output?.statusCode ===
-        DisconnectReason.restartRequired;
-
-    if (restartBot) {
-      console.warn("🔄 Conexão fechada, reiniciando bot...");
-      await startBot();
-    } else if (connection === "open") {
-      console.log("✅ Conectado ao WhatsApp com sucesso!");
-    }
+  fastify.register(fastifyAwilixPlugin, {
+    disposeOnClose: true,
+    disposeOnResponse: true,
+    strictBooleanEnforced: true,
   });
 
-  sock.ev.on("messages.upsert", async ({ type, messages }) => {
-    if (type !== "notify") return;
+  fastify.register(dependencyInjection);
+  fastify.register(routes, { prefix: "v1" });
 
-    for (const message of messages) {
-      console.log(`📩 Nova mensagem de ${message.pushName}`);
+  try {
+    await fastify.listen({ port: 8080 });
+  } catch (err) {
+    fastify.log.error(err);
+    process.exit(1);
+  }
+};
 
-      console.log("📩 ~ sock.ev.on ~ message:", message);
-
-      const jidNumber = (
-        message.key.participant || message.key.remoteJid
-      )?.split("@")[0];
-
-      console.log("🚀 ~ sock.ev.on ~ jid:", jidNumber);
-
-      const messageText =
-        message.message?.conversation ||
-        message.message?.extendedTextMessage?.text;
-
-      sendsChosenLunch(sock, messageText, jidNumber);
-    }
-  });
-}
-
-startBot();
+start();
