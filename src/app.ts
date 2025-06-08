@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 
 import { fastifyAwilixPlugin } from "@fastify/awilix";
 import fastifyCors from "@fastify/cors";
+import fastifySchedule from "@fastify/schedule";
 import Fastify from "fastify";
 import {
   serializerCompiler,
@@ -35,6 +36,9 @@ const start = async () => {
   });
 
   fastify.register(dependencyInjection);
+  fastify.register(fastifySchedule);
+  // fastify.register(registerJobs);
+
   fastify.register(routes, { prefix: "v1" });
 
   try {

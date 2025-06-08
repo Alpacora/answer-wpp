@@ -51,6 +51,7 @@ export class AutoLunchBotService {
         await this.start();
       } else if (connection === "open") {
         console.log("✅ Conectado ao WhatsApp com sucesso!");
+        sendsChargeMessage(sock, contacts);
       }
     });
 
@@ -69,7 +70,6 @@ export class AutoLunchBotService {
           message.message?.extendedTextMessage?.text;
 
         sendsChosenLunch(sock, messageText, jidNumber);
-        sendsChargeMessage(sock, contacts);
       }
     });
   }

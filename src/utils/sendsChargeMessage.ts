@@ -9,7 +9,6 @@ export function sendsChargeMessage(
   const month = today.getMonth();
 
   const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
-  console.log("🚀 ~ lastDayOfMonth:", lastDayOfMonth);
 
   if (today.getDate() !== lastDayOfMonth) return;
 

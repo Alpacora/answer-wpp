@@ -114,7 +114,7 @@ export async function sendsChosenLunch(
 
     if (confirmLunch) {
       console.log("✅ Almoço confirmado pelo usuário!");
-      // TODO: Make a payment
+      sock.end(new Error("Lunch chosen"));
     }
   }
 }
