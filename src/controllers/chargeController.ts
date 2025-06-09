@@ -25,6 +25,7 @@ export class ChargeController {
         firstName?: string;
         lastName?: string;
         phone?: string;
+        payday?: number;
         message?: string;
       };
     }>,

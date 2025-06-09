@@ -102,8 +102,8 @@ export async function sendsChosenLunch(
   console.log("🚀 ~ target:", target);
 
   if (jidNumber === target) {
-    const isMenu = messageText.includes("Cardápio");
-    const confirmLunch = messageText.includes("Ok");
+    const isMenu = messageText?.includes("Cardápio");
+    const confirmLunch = messageText?.includes("Ok");
 
     if (isMenu) {
       const response = choiceLunch(messageText);

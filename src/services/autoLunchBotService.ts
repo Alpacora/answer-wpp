@@ -13,6 +13,8 @@ const AUTH_PATH = path.join(__dirname, "../../auth_info_baileys");
 
 export class AutoLunchBotService {
   COLLECTION_TO_CONNECT: string = "contacts";
+  private enableChargeBot: boolean = false;
+  private enableAutoLunchBot: boolean = false;
   private qrCodeDataURL: string = "";
   private sock: ReturnType<typeof makeWASocket> | undefined;
   private readonly database: Db;
@@ -31,9 +33,6 @@ export class AutoLunchBotService {
 
     this.sock = sock;
 
-    const collection = this.database.collection(this.COLLECTION_TO_CONNECT);
-    const contacts = await collection.find().toArray();
-
     sock.ev.on("creds.update", saveCreds);
 
     sock.ev.on("connection.update", async (update) => {
@@ -51,7 +50,17 @@ export class AutoLunchBotService {
         await this.start();
       } else if (connection === "open") {
         console.log("✅ Conectado ao WhatsApp com sucesso!");
-        sendsChargeMessage(sock, contacts);
+
+        if (this.enableChargeBot) {
+          const today = new Date().getDate();
+          const collection = this.database.collection(
+            this.COLLECTION_TO_CONNECT
+          );
+          const contacts = await collection.find({ payday: today }).toArray();
+          console.log("🚀 ~ AutoLunchBotService ~ start ~ contacts:", contacts);
+
+          sendsChargeMessage(sock, contacts);
+        }
       }
     });
 
@@ -69,14 +78,20 @@ export class AutoLunchBotService {
           message.message?.conversation ||
           message.message?.extendedTextMessage?.text;
 
-        sendsChosenLunch(sock, messageText, jidNumber);
+        if (this.enableAutoLunchBot) {
+          sendsChosenLunch(sock, messageText, jidNumber);
+        }
       }
     });
   }
 
-  async stop() {
+  async stop(shutdownAll: boolean = false) {
     if (this.sock) {
       console.log("🛑 Parando o bot...");
+      if (shutdownAll) {
+        this.enableChargeBot = false;
+        this.enableAutoLunchBot = false;
+      }
       this.sock.end(new Error("Shutdown..."));
       this.sock = undefined;
     } else {
@@ -90,5 +105,23 @@ export class AutoLunchBotService {
 
   getQrCodeDataURL(): string {
     return this.qrCodeDataURL;
+  }
+
+  toggleChargeBot(): boolean {
+    this.enableChargeBot = !this.enableChargeBot;
+    return this.enableChargeBot;
+  }
+
+  toggleAutoLunchBot(): boolean {
+    this.enableAutoLunchBot = !this.enableAutoLunchBot;
+    return this.enableAutoLunchBot;
+  }
+
+  isChargeBotEnabled(): boolean {
+    return this.enableChargeBot;
+  }
+
+  isAutoLunchBotEnabled(): boolean {
+    return this.enableAutoLunchBot;
   }
 }

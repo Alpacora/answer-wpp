@@ -29,6 +29,7 @@ async function routes(fastify: FastifyInstance, options: Object) {
           firstName: z.string(),
           lastName: z.string(),
           phone: z.string(),
+          payday: z.number().min(1).max(31),
           message: z.string(),
         }),
       },
@@ -40,17 +41,27 @@ async function routes(fastify: FastifyInstance, options: Object) {
   );
 
   // BOT
-  fastify.get("/bot/lunch/qr-code", (request, reply) => {
+  fastify.get("/bot/qr-code", (request, reply) => {
     const controller = request.diScope.resolve("autoLunchBotController");
     return controller.generateQRCode(request, reply);
   });
-  fastify.post("/bot/lunch/start", (request, reply) => {
-    const controller = request.diScope.resolve("autoLunchBotController");
-    return controller.startBotHandler(request, reply);
+
+  // Toggle
+  fastify.get("/toggles", (request, reply) => {
+    const controller = request.diScope.resolve("toggleController");
+    return controller.getTogglesState(request, reply);
   });
-  fastify.delete("/bot/lunch/stop", (request, reply) => {
-    const controller = request.diScope.resolve("autoLunchBotController");
-    return controller.stopBotHandler(request, reply);
+  fastify.post("/toggles/bot", (request, reply) => {
+    const controller = request.diScope.resolve("toggleController");
+    return controller.toggleBot(request, reply);
+  });
+  fastify.post("/toggles/auto-lunch-bot", (request, reply) => {
+    const controller = request.diScope.resolve("toggleController");
+    return controller.toggleAutoLunchBot(request, reply);
+  });
+  fastify.post("/toggles/charge-bot", (request, reply) => {
+    const controller = request.diScope.resolve("toggleController");
+    return controller.toggleChargeBot(request, reply);
   });
 }
 

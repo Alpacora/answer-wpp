@@ -5,6 +5,7 @@ const chargeSchema = z.object({
   firstName: z.string(),
   lastName: z.string(),
   phone: z.string(),
+  payday: z.number().min(1).max(31),
   message: z.string(),
 });
 

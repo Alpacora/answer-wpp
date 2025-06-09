@@ -4,13 +4,13 @@ export function sendsChargeMessage(
   sock: ReturnType<typeof makeWASocket>,
   contacts: any[]
 ) {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+  // const today = new Date();
+  // const year = today.getFullYear();
+  // const month = today.getMonth();
 
-  const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
+  // const lastDayOfMonth = new Date(year, month + 1, 0).getDate();
 
-  if (today.getDate() !== lastDayOfMonth) return;
+  // if (today.getDate() !== lastDayOfMonth) return;
 
   contacts.forEach(async (contact) => {
     await sock.sendMessage(`${contact.phone}@s.whatsapp.net`, {

@@ -3,6 +3,7 @@ import { asClass, asValue, Lifetime } from "awilix";
 import fastifyPlugin from "fastify-plugin";
 import { AutoLunchBotController } from "./controllers/autoLunchBotController";
 import { ChargeController } from "./controllers/chargeController";
+import { ToggleController } from "./controllers/toggleController";
 import { AutoLunchBotService } from "./services/autoLunchBotService";
 
 export default fastifyPlugin((fastify) => {
@@ -15,6 +16,9 @@ export default fastifyPlugin((fastify) => {
       lifetime: Lifetime.SINGLETON,
     }),
     autoLunchBotController: asClass(AutoLunchBotController, {
+      lifetime: Lifetime.SINGLETON,
+    }),
+    toggleController: asClass(ToggleController, {
       lifetime: Lifetime.SINGLETON,
     }),
   });
