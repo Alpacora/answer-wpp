@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  fastify-app:
+    build: .
+    container_name: answer-api
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./auth_info_baileys:/app/auth_info_baileys
+    env_file:
+      - .env
+    restart: unless-stopped
