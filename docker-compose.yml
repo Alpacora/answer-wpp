@@ -1,13 +1,31 @@
 version: "3.8"
 
 services:
-  fastify-app:
+  answer-api:
     build: .
     container_name: answer-api
     ports:
       - "8080:8080"
     volumes:
-      - ./auth_info_baileys:/app/auth_info_baileys
+      - auth_info_baileys:/app/auth_info_baileys
     env_file:
       - .env
+    depends_on:
+      - mongo
     restart: unless-stopped
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: admin
+
+volumes:
+  auth_info_baileys:
+  mongo_data:

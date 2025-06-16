@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import { z } from "zod";
+import { arrayOfLunchSchema } from "./schemas/lunchSchema";
 
 async function routes(fastify: FastifyInstance, options: Object) {
   // Charges
@@ -63,6 +64,24 @@ async function routes(fastify: FastifyInstance, options: Object) {
     const controller = request.diScope.resolve("toggleController");
     return controller.toggleChargeBot(request, reply);
   });
+
+  // Lunch
+  fastify.get("/lunch", (request, reply) => {
+    const controller = request.diScope.resolve("lunchController");
+    return controller.getLunch(request, reply);
+  });
+  fastify.post(
+    "/lunch",
+    {
+      schema: {
+        body: arrayOfLunchSchema,
+      },
+    },
+    (request, reply) => {
+      const controller = request.diScope.resolve("lunchController");
+      return controller.createNewLunch(request, reply);
+    }
+  );
 }
 
 export default routes;

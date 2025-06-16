@@ -6,7 +6,7 @@ import choiceMenu from "../menus/max_healthy_lunch_combinations.json";
 export function choiceLunch(menu: string): string {
   let lunchTodDay = undefined;
   let attempts = 1;
-  const MAX_ATTEMPTS = choiceMenu.week.length;
+  const MAX_ATTEMPTS = choiceMenu.menu.length;
   const normalizedMenu = normalizeBeans(
     menu.toLowerCase().replaceAll("\n", " ")
   );
@@ -19,7 +19,7 @@ export function choiceLunch(menu: string): string {
 
     console.log(`🔍 Verificando posição sorteada: ${randomNumber}`);
 
-    const choice = choiceMenu.week.find(
+    const choice = choiceMenu.menu.find(
       (element) => element.day === randomNumber.toString()
     );
     console.log("🚀 ~ choiceLunch ~ choice:", choice);

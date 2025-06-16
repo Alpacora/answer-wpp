@@ -1,5 +1,6 @@
 import "@fastify/awilix";
 import { AutoLunchBotController } from "src/controllers/autoLunchBotController";
+import { LunchController } from "src/controllers/lunchController";
 import { ToggleController } from "src/controllers/toggleController";
 import { startBot } from "src/services/autoLunchBotService";
 declare module "@fastify/awilix" {
@@ -7,6 +8,7 @@ declare module "@fastify/awilix" {
     chargeController: ChargeController;
     autoLunchBotController: AutoLunchBotController;
     toggleController: ToggleController;
+    lunchController: LunchController;
     database: Db;
     autoLunchBotService: ReturnType<typeof startBot>;
   }
