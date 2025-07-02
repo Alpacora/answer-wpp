@@ -1,10 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import fs from "fs/promises";
 import { Db, ObjectId } from "mongodb";
 import {
   ArrayOfLunchSchemaType,
   DeleteLunchSchemaType,
   lunchResponseSchema,
 } from "../schemas/lunchSchema";
+import path from "node:path";
 
 export class LunchController {
   COLLECTION_TO_CONNECT: string = "lunch";
@@ -43,5 +45,11 @@ export class LunchController {
       _id: new ObjectId(request.params.id),
     });
     reply.code(204).send();
+  }
+
+  async readLogs(request: FastifyRequest, reply: FastifyReply) {
+    const finalPath = path.join(process.cwd(), "auth_info_baileys", "logsData.txt");
+    const result = await fs.readFile(finalPath, "utf-8");
+    reply.code(200).send(result);
   }
 }

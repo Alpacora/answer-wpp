@@ -1,7 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Db, ObjectId } from "mongodb";
 import { chargeSchemaResponse, DeleteChargeParams } from "../schemas/chargeSchema";
-import { ZodTypeProvider } from "fastify-type-provider-zod";
 
 export class ChargeController {
   COLLECTION_TO_CONNECT: string = "contacts";

@@ -61,9 +61,13 @@ async function routes(fastify: FastifyInstance, options: Object) {
   });
 
   // Lunch
-  app.get("/lunch", (request, reply) => {
+  app.get("/lunch", async (request, reply) => {
     const controller = request.diScope.resolve("lunchController");
-    return controller.getLunch(request, reply);
+    return await controller.getLunch(request, reply);
+  });
+  app.get("/lunch/logs", async (request, reply) => {
+    const controller = request.diScope.resolve("lunchController");
+    return await controller.readLogs(request, reply);
   });
   app.post(
     "/lunch",
