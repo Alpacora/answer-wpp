@@ -13,6 +13,7 @@ const AUTH_PATH = path.join(__dirname, "../../auth_info_baileys");
 
 export class AutoLunchBotService {
   COLLECTION_TO_CONNECT: string = "contacts";
+  LUNCH_COLLECTION_TO_CONNECT: string = "lunch";
   private enableChargeBot: boolean = false;
   private enableAutoLunchBot: boolean = false;
   private qrCodeDataURL: string = "";
@@ -43,7 +44,7 @@ export class AutoLunchBotService {
       const restartBot =
         connection === "close" &&
         (lastDisconnect?.error as Boom)?.output?.statusCode ===
-          DisconnectReason.restartRequired;
+        DisconnectReason.restartRequired;
 
       if (restartBot) {
         console.warn("🔄 Conexão fechada, reiniciando bot...");
@@ -78,8 +79,12 @@ export class AutoLunchBotService {
           message.message?.conversation ||
           message.message?.extendedTextMessage?.text;
 
+        if (!messageText || !jidNumber) {
+          return;
+        }
+
         if (this.enableAutoLunchBot) {
-          sendsChosenLunch(sock, messageText, jidNumber);
+          sendsChosenLunch(sock, messageText, jidNumber, this.database);
         }
       }
     });
@@ -95,7 +100,7 @@ export class AutoLunchBotService {
       this.sock.end(new Error("Shutdown..."));
       this.sock = undefined;
     } else {
-      console.log("⚠️ Bot não está ativo.");
+      console.warn("⚠️ Bot não está ativo.");
     }
   }
 

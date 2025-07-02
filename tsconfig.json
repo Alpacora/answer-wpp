@@ -2,20 +2,35 @@
   "compilerOptions": {
     "target": "ES2023",
     "module": "nodenext",
-    "lib": ["ES2023"],
+    "lib": [
+      "ES2023"
+    ],
+    "strict": true,
     "moduleResolution": "nodenext",
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "outDir": "dist",
     "rootDir": "src",
-    "typeRoots": ["src/@types", "node_modules/@types"],
+    "typeRoots": [
+      "src/@types",
+      "node_modules/@types"
+    ],
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@utils": ["src/utils/index"],
-      "@utils/*": ["src/utils/*"]
+      "@utils": [
+        "src/utils/index"
+      ],
+      "@utils/*": [
+        "src/utils/*"
+      ]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

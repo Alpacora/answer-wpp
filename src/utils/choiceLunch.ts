@@ -1,12 +1,19 @@
 import { logToFile, normalizeBeans, randomIntFromInterval } from "@utils";
 import makeWASocket from "@whiskeysockets/baileys";
+import { Db } from "mongodb";
+import { ArrayOfLunchSchemaType } from "src/schemas/lunchSchema";
 import { NOT_REQUIRED_SIDES } from "../constants";
-import choiceMenu from "../menus/max_healthy_lunch_combinations.json";
+import { env } from "../env";
 
-export function choiceLunch(menu: string): string {
+const COLLECTION_TO_CONNECT = "lunch";
+
+export function choiceLunch(
+  menu: string,
+  lunches: ArrayOfLunchSchemaType
+): string {
   let lunchTodDay = undefined;
   let attempts = 1;
-  const MAX_ATTEMPTS = choiceMenu.menu.length;
+  const MAX_ATTEMPTS = lunches.length;
   const normalizedMenu = normalizeBeans(
     menu.toLowerCase().replaceAll("\n", " ")
   );
@@ -19,7 +26,7 @@ export function choiceLunch(menu: string): string {
 
     console.log(`🔍 Verificando posição sorteada: ${randomNumber}`);
 
-    const choice = choiceMenu.menu.find(
+    const choice = lunches.find(
       (element) => element.day === randomNumber.toString()
     );
     console.log("🚀 ~ choiceLunch ~ choice:", choice);
@@ -96,17 +103,22 @@ ${lunchTodDay.sides.map((side) => `- ${side}`).join("\n")}
 export async function sendsChosenLunch(
   sock: ReturnType<typeof makeWASocket>,
   messageText: string,
-  jidNumber: string
+  jidNumber: string,
+  database: Db
 ) {
-  const target = process.env.TARGET_WA_ID?.split("@")[0];
-  console.log("🚀 ~ target:", target);
+  const target = env.TARGET_WA_ID?.split("@")[0];
 
   if (jidNumber === target) {
     const isMenu = messageText?.includes("Cardápio");
     const confirmLunch = messageText?.includes("Ok");
 
     if (isMenu) {
-      const response = choiceLunch(messageText);
+      const collection = database.collection(COLLECTION_TO_CONNECT);
+      const lunches = (await collection
+        .find()
+        .toArray()) as unknown as ArrayOfLunchSchemaType;
+
+      const response = choiceLunch(messageText, lunches);
       if (!response) {
         return;
       }

@@ -1,18 +1,19 @@
 import fastifyMongo from "@fastify/mongodb";
 import { FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
+import { env } from "../env";
 
 async function dbConnector(fastify: FastifyInstance, options: Object) {
   await fastify.register(fastifyMongo, {
-    url: process.env.DB_URL,
-    database: process.env.DB,
+    url: env.DB_URL,
+    database: env.DB,
     auth: {
-      username: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
+      username: env.DB_USER,
+      password: env.DB_PASSWORD,
     },
   });
 
-  await fastify.mongo.db
+  await fastify.mongo.db!
     .collection("lunch")
     .createIndex({ day: 1 }, { unique: true });
 }

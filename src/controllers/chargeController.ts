@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Db, ObjectId } from "mongodb";
-import { chargeSchemaResponse } from "../schemas/chargeSchema";
+import { chargeSchemaResponse, DeleteChargeParams } from "../schemas/chargeSchema";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
 
 export class ChargeController {
   COLLECTION_TO_CONNECT: string = "contacts";
@@ -52,7 +53,7 @@ export class ChargeController {
   }
 
   async deleteCharge(
-    request: FastifyRequest<{ Params: { id: string } }>,
+    request: FastifyRequest<{ Params: DeleteChargeParams }>,
     reply: FastifyReply
   ) {
     const collection = this.database.collection(this.COLLECTION_TO_CONNECT);

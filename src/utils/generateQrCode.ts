@@ -1,7 +1,7 @@
 import QRCode from "qrcode";
 
-export async function generateQrCode(qrCode: string) {
-  if (!qrCode) return;
+export async function generateQrCode(qrCode?: string) {
+  if (!qrCode) return "";
   try {
     const mountedQrCode = await QRCode.toString(qrCode, {
       type: "terminal",
@@ -12,5 +12,6 @@ export async function generateQrCode(qrCode: string) {
     return dataURL;
   } catch (error) {
     console.error("🚀 ~ generateQrCode ~ error:", error);
+    return "";
   }
 }

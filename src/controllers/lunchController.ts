@@ -1,9 +1,10 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { Db } from "mongodb";
+import { Db, ObjectId } from "mongodb";
 import {
   ArrayOfLunchSchemaType,
+  DeleteLunchSchemaType,
   lunchResponseSchema,
-} from "src/schemas/lunchSchema";
+} from "../schemas/lunchSchema";
 
 export class LunchController {
   COLLECTION_TO_CONNECT: string = "lunch";
@@ -22,11 +23,25 @@ export class LunchController {
     reply.code(200).send(mappedResult);
   }
 
-  async createNewLunch(request: FastifyRequest, reply: FastifyReply) {
+  async createNewLunch(
+    request: FastifyRequest<{ Body: ArrayOfLunchSchemaType }>,
+    reply: FastifyReply
+  ) {
     const collection = this.database.collection(this.COLLECTION_TO_CONNECT);
-    const newLunch = request.body as ArrayOfLunchSchemaType;
+    const newLunch = request.body;
 
     const result = await collection.insertMany(newLunch);
     reply.code(201).send(result);
+  }
+
+  async deleteLunch(
+    request: FastifyRequest & { params: DeleteLunchSchemaType },
+    reply: FastifyReply
+  ) {
+    const collection = this.database.collection(this.COLLECTION_TO_CONNECT);
+    await collection.deleteOne({
+      _id: new ObjectId(request.params.id),
+    });
+    reply.code(204).send();
   }
 }

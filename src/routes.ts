@@ -1,20 +1,21 @@
 import { FastifyInstance } from "fastify";
-import { z } from "zod";
-import { arrayOfLunchSchema } from "./schemas/lunchSchema";
+import { arrayOfLunchSchema, deleteLunchSchema } from "./schemas/lunchSchema";
+import { chargeSchema, deleteChargeSchema } from "./schemas/chargeSchema";
+import { ZodTypeProvider } from "fastify-type-provider-zod";
 
 async function routes(fastify: FastifyInstance, options: Object) {
+  const app = fastify.withTypeProvider<ZodTypeProvider>();
+
   // Charges
-  fastify.get("/charges", (request, reply) => {
+  app.get("/charges", (request, reply) => {
     const controller = request.diScope.resolve("chargeController");
     return controller.getCharges(request, reply);
   });
-  fastify.delete(
+  app.delete(
     "/charges/:id",
     {
       schema: {
-        params: z.object({
-          id: z.string(),
-        }),
+        params: deleteChargeSchema,
       },
     },
     (request, reply) => {
@@ -22,17 +23,11 @@ async function routes(fastify: FastifyInstance, options: Object) {
       return controller.deleteCharge(request, reply);
     }
   );
-  fastify.post(
+  app.post(
     "/charges",
     {
       schema: {
-        body: z.object({
-          firstName: z.string(),
-          lastName: z.string(),
-          phone: z.string(),
-          payday: z.number().min(1).max(31),
-          message: z.string(),
-        }),
+        body: chargeSchema,
       },
     },
     (request, reply) => {
@@ -42,35 +37,35 @@ async function routes(fastify: FastifyInstance, options: Object) {
   );
 
   // BOT
-  fastify.get("/bot/qr-code", (request, reply) => {
+  app.get("/bot/qr-code", (request, reply) => {
     const controller = request.diScope.resolve("autoLunchBotController");
     return controller.generateQRCode(request, reply);
   });
 
   // Toggle
-  fastify.get("/toggles", (request, reply) => {
+  app.get("/toggles", (request, reply) => {
     const controller = request.diScope.resolve("toggleController");
     return controller.getTogglesState(request, reply);
   });
-  fastify.post("/toggles/bot", (request, reply) => {
+  app.post("/toggles/bot", (request, reply) => {
     const controller = request.diScope.resolve("toggleController");
     return controller.toggleBot(request, reply);
   });
-  fastify.post("/toggles/auto-lunch-bot", (request, reply) => {
+  app.post("/toggles/auto-lunch-bot", (request, reply) => {
     const controller = request.diScope.resolve("toggleController");
     return controller.toggleAutoLunchBot(request, reply);
   });
-  fastify.post("/toggles/charge-bot", (request, reply) => {
+  app.post("/toggles/charge-bot", (request, reply) => {
     const controller = request.diScope.resolve("toggleController");
     return controller.toggleChargeBot(request, reply);
   });
 
   // Lunch
-  fastify.get("/lunch", (request, reply) => {
+  app.get("/lunch", (request, reply) => {
     const controller = request.diScope.resolve("lunchController");
     return controller.getLunch(request, reply);
   });
-  fastify.post(
+  app.post(
     "/lunch",
     {
       schema: {
@@ -80,6 +75,18 @@ async function routes(fastify: FastifyInstance, options: Object) {
     (request, reply) => {
       const controller = request.diScope.resolve("lunchController");
       return controller.createNewLunch(request, reply);
+    }
+  );
+  app.delete(
+    "/lunch/:id",
+    {
+      schema: {
+        params: deleteLunchSchema,
+      },
+    },
+    (request, reply) => {
+      const controller = request.diScope.resolve("lunchController");
+      return controller.deleteLunch(request, reply);
     }
   );
 }

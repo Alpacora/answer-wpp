@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-
 import { fastifyAwilixPlugin } from "@fastify/awilix";
 import fastifyCors from "@fastify/cors";
 import fastifySchedule from "@fastify/schedule";
@@ -7,13 +5,12 @@ import Fastify from "fastify";
 import {
   serializerCompiler,
   validatorCompiler,
-  ZodTypeProvider,
 } from "fastify-type-provider-zod";
+import type { ZodTypeProvider } from "fastify-type-provider-zod";
 import dbConnector from "./database/connection";
 import dependencyInjection from "./dependencyInjection";
 import routes from "./routes";
-
-dotenv.config();
+import { env } from "./env";
 
 const start = async () => {
   const fastify = Fastify({
@@ -44,7 +41,7 @@ const start = async () => {
   try {
     await fastify.listen({
       host: "0.0.0.0",
-      port: Number(process.env.PORT) || 8080,
+      port: Number(env.PORT) || 8080,
     });
   } catch (err) {
     fastify.log.error(err);
