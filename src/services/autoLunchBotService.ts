@@ -69,11 +69,12 @@ export class AutoLunchBotService {
       if (type !== "notify") return;
 
       for (const message of messages) {
-        console.log(`📩 Nova mensagem de ${message.pushName}`);
 
         const jidNumber = (
           message.key.participant || message.key.remoteJid
         )?.split("@")[0];
+
+        console.log(`📩 Nova mensagem de ${message.pushName} - ${jidNumber}`);
 
         const messageText =
           message.message?.conversation ||

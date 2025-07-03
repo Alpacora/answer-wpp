@@ -11,6 +11,7 @@ import dbConnector from "./database/connection";
 import dependencyInjection from "./dependencyInjection";
 import routes from "./routes";
 import { env } from "./env";
+import registerJobs from "./jobs/registerJobs";
 
 const start = async () => {
   const fastify = Fastify({
@@ -34,7 +35,7 @@ const start = async () => {
 
   fastify.register(dependencyInjection);
   fastify.register(fastifySchedule);
-  // fastify.register(registerJobs);
+  fastify.register(registerJobs);
 
   fastify.register(routes, { prefix: "v1" });
 

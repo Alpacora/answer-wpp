@@ -15,21 +15,21 @@ export class ToggleController {
   async toggleChargeBot(request: FastifyRequest, reply: FastifyReply) {
     const isEnabledBot = this.autoLunchBotService.isRunning();
 
-    if (!isEnabledBot) {
-      return reply.code(400).send({
-        statusCode: 400,
-        code: "BOT_TURNED_OFF",
-        error: "Bad Request",
-        message: "The bot is turned off, wake up the bot first",
-      });
-    }
+    // if (!isEnabledBot) {
+    //   return reply.code(400).send({
+    //     statusCode: 400,
+    //     code: "BOT_TURNED_OFF",
+    //     error: "Bad Request",
+    //     message: "The bot is turned off, wake up the bot first",
+    //   });
+    // }
 
     const isEnabledAutoCharge = this.autoLunchBotService.toggleChargeBot();
 
-    if (isEnabledAutoCharge) {
-      await this.autoLunchBotService.stop();
-      await this.autoLunchBotService.start();
-    }
+    // if (isEnabledAutoCharge) {
+    //   await this.autoLunchBotService.stop();
+    //   await this.autoLunchBotService.start();
+    // }
 
     reply.status(200).send({
       isEnabledAutoCharge,
