@@ -13,7 +13,10 @@ export function autoStartLunchBot() {
     jobName,
     async () => {
       await autoLunchBotService.start();
-      await autoLunchBotService.toggleAutoLunchBot();
+      setTimeout(() => {
+        console.log("🔄 enabling AutoLunchBot after 60 seconds...");
+        autoLunchBotService.toggleAutoLunchBot();
+      }, 60 * 1000); // Wait 60 seconds before enabling the bot
     },
     (err: Error) => {
       console.log("🚀 ~ fastifyPlugin ~ err:", err);

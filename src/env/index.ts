@@ -18,7 +18,7 @@ const envSchema = z.object({
   DB: z.string(),
   DB_USER: z.string(),
   DB_PASSWORD: z.string(),
-  PORT: z.string().default("8080").transform(Number),
+  PORT: z.coerce.number().default(8080),
 });
 
 const _env = envSchema.safeParse(process.env);
